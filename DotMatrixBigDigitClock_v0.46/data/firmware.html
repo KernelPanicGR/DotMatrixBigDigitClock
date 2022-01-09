@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="el-GR">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="Dot Matrix Web Clock">
+		<meta name="author" content="Kernel Panic">
+        <title>firmware update</title>
+        <meta charset="UTF-8">
+		<link href="style.css" rel="stylesheet" type="text/css"> 
+		<link href="img/favicon.webp" rel="icon" type="image/x-icon"> 
+        <style>
+			body{
+			font-family:sans-serif;
+			background-color:#171717;
+			background-image: url("img/MyLogo.webp");	
+			background-repeat: no-repeat;
+			background-position: 0.5% 99%;
+			background-attachment: fixed;
+			}
+			h1{
+			font-size:2.4em;
+			text-align: center;
+			color: DodgerBlue;
+			margin: 0px; 
+			}
+			#file-input,input{
+			width:100%;
+			height:50px;
+			border-radius:5px;
+			margin:20px auto;
+			font-size:2em
+			}
+            #file-input{
+			padding:0;
+			border:1px solid #fff;
+            line-height:45px;
+			text-align:left;
+			color:  #fff;
+            display:block;
+			font-size:1em;
+			cursor:pointer
+			}
+			
+            #bar,#prgbar{
+			background-color:#E3E3E8;
+            border-radius:10px}
+			#bar{
+			background-color:#4d94ff;
+			width:0%;
+			height:12px
+			}
+            form{
+			background:#b6b6b6;
+			max-width:450px;
+			margin:15px auto;
+			padding:30px;
+			border-radius:5px;
+			text-align:center;
+			}
+			
+            .btn{
+			background-image: linear-gradient(#2d7fd8, #020627);
+			color:LightGray; 
+            text-shadow: 0 -1px 2px #000;
+			cursor:pointer;
+			}
+		</style>
+	</head>
+    <body>
+        <a href="index.html"><img src="img/home.svg"></a>
+		<h1>Firmware Upload</h1>
+        <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
+		<form method="POST" action="#" enctype="multipart/form-data" id="upload_form">
+            <input type="file" accept=".bin,.bin.gz" name="update" id="file" onchange="sub(this)" style=display:none>
+            <label id="file-input" for="file">Eπίλεξε ένα .bin αρχείο...</label>
+            <input onmouseover="style.color='Tomato'" 
+			onmouseout="style.color='LightGray'" type="submit" class="btn" value="Ενημέρωση">
+            <br><br>
+            <div id="prg"></div> <br/>
+		<div id="prgbar"><div id="bar"></div></div><br></form>
+        <script>	
+			
+			// ==== init === 
+			window.addEventListener("load", init, false);
+			function init() {
+				ourURL = window.location.href;
+				console.log("ourURL = "+ ourURL);
+				chop = 0;
+				if (ourURL.startsWith("http://")) {
+					chop = 7;
+					} else if (ourURL.startsWith("https://")) {
+					chop = 8;
+					} else {
+					console.log("window.location.href is not an http URL");
+					document.getElementById('file-input').innerHTML = "<font color=#e22>- OFF Line - </font>";
+				}
+				
+				if (chop != 0) {
+					 Run();
+				}
+			}
+
+			
+			// ==== Firmware Upload === 
+			function Run() {
+				function sub(obj){
+					var fileName = obj.value.split("\\\\");
+					document.getElementById("file-input").innerHTML = "    " + fileName[fileName.length-1];
+				};
+				$("form").submit(function(e){
+					e.preventDefault();
+					var form = $("#upload_form")[0];
+					var data = new FormData(form);
+					$.ajax({
+						url: "/update",
+						type: "POST",
+						data: data,
+						contentType: false,
+						processData:false,
+						xhr: function() {
+							var xhr = new window.XMLHttpRequest();
+							xhr.upload.addEventListener("progress", function(evt) {
+								if (evt.lengthComputable) {
+									var per = evt.loaded / evt.total;
+									$("#prg").html("progress: " + Math.round(per*100) + "%");
+									$("#bar").css("width",Math.round(per*100) + "%");
+								}
+							}, false);
+							return xhr;
+						},
+						
+						success:function(d, s) {
+							window.location.assign("/success.html"),
+							console.log("success!")
+						},
+						error: function (a, b, c) {
+							window.location.assign("/error.html")
+						}
+						
+					});
+				});
+			}
+			
+		</script>
+	</body>
+</html>

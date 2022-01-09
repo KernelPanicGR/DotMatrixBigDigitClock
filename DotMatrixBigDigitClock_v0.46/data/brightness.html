@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="el-GR">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="Dot Matrix Web Clock">
+		<meta name="author" content="Kernel Panic">
+		<title>Φωτεινότητα</title>
+		<script src="script.js"></script>	
+		<link href="style.css" rel="stylesheet" type="text/css"> 
+		<link href="img/favicon.ico" rel="icon" type="image/x-icon">
+		<style>
+			/*
+			brightnes slider 
+			https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_js_rangeslider_round  
+			*/
+			.brightnesscontainer {
+			width: 100%;
+			}
+			.slider {
+			-webkit-appearance: none;
+			width: 50%;
+			height: 20px;
+			border-radius: 10px;
+			background: #565656;
+			outline: none;
+			opacity: 0.7;
+			-webkit-transition: .4s;
+			transition: opacity .4s;
+			}
+			.slider:hover {
+			opacity: 1;
+			}
+			.slider::-webkit-slider-thumb {
+			-webkit-appearance: none;
+			appearance: none;
+			width: 34px;
+			height: 34px;
+			border-radius: 50%;
+			background: #3ba8ff;
+			cursor: pointer;
+			}
+			.slider::-moz-range-thumb {
+			width: 25px;
+			height: 25px;
+			border-radius: 50%;
+			background: #4CAF50;
+			cursor: pointer;
+			}
+			
+			#statusBar {
+			margin: 0;
+			padding: 0;
+			position: absolute; 
+			left: 1;
+			right: 0;
+			bottom: 0;
+			height: 30px;
+			/*	background-color: rgb(30, 30, 30); 
+			color: #3ba8ff; */
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<aside class="sidebar">
+				<nav class="nav">
+					<ul class="nav-items">
+						<!--  <li class="nav-title">Menu</li>  -->				
+						<li><a class="nav-link" href="index.html"> <img src="img/home.svg"/></a></li>
+						<li><a class="nav-link" href="info.html"><img src="img/info.svg"/></a></li>
+						<li><a class="nav-link" href="weather.html"><img src="img/weather.svg"/></a></li>
+						<li><a class="active" href="brightness.html"><img src="img/brightness.svg"/></a></li>
+						<li><a class="nav-link" href="edit"><img src="img/Edit.svg"/></a></li>
+						<li><a class="nav-link" href="config.html"><img src="img/wifi.svg"/></a></li>
+						<li><a class="nav-link" href="firmware.html"><img src="img/upload.svg"/></a></li>
+						<div class="sidebar-separator"></div>
+						<li><a class="nav-link" href="javascript:restartcpu()"><img src="img/reboot.svg"/></a></li>						
+					</ul>
+					
+				</nav>
+			</aside>
+			<div class="menubutton">
+				<div class="bar"></div>
+				<div class="bar"></div>
+				<div class="bar"></div>
+			</div>
+		</div>
+		<main class="main" role="main">
+			<h1 align="center"> Φωτεινότητα Dot matrix : <span id="BrightText">??</span> </h1><br/>	
+			<div align="center" class="brightnesscontainer">
+				<input class="slider" type="range" min="0" max="15" value="1" id="BrightSlide" onchange="onBrighChange()" oninput="onBrighChange()"> 
+			</div>
+		</main>
+		<script>
+			// === Menu ===
+			var container = document.querySelector(".container");
+			var main = document.querySelector(".main");
+			document.querySelector(".menubutton").addEventListener("click", toggleSidebar, false);
+			container.addEventListener("click", function(e) {
+			if(isShowingSidebar() && main.contains(e.target)) {  
+			e.preventDefault();
+			hideSidebar();
+			}
+			}, true);
+			
+			
+			// === Start ===
+			function Start() {
+				start ? Run() : 
+				document.getElementById('BrightText').innerHTML = "<font color=#e22> OFF Line  </font>";
+			}
+			
+			// -- Brightness ----- 
+			function Run() {
+				tmp = ourURL.slice(chop);
+				if ((idx = tmp.indexOf("/")) != -1) {
+					ourHost = tmp.slice(0, idx);
+					console.log("ourHost = "+ ourHost);
+					
+					url = "ws://"+ ourHost +"/brightness";
+					console.log("url = "+ url);
+					
+					// Connect to WebSocket server
+					wsConnect(url);
+				}
+			}
+			
+				// Call this to connect to the WebSocket server
+			function wsConnect(url) {
+				
+				// Connect to WebSocket server
+				websocket = new WebSocket(url);
+				
+				// Assign callbacks
+				websocket.onopen = function(evt) { onOpen(evt) };
+				websocket.onclose = function(evt) { onClose(evt) };
+				websocket.onmessage = function(evt) { onMessage(evt) };
+				websocket.onerror = function(evt) { onError(evt) };
+			}
+			
+			// Called when a WebSocket connection is established with the server
+			function onOpen(evt) {
+				
+				// Log connection state
+				console.log("Connected");
+				doSend("{\"page\": " + "\"brightness.html\"}");
+			}
+			
+			// Called when the WebSocket connection is closed
+			function onClose(evt) {
+				
+				// Log disconnection state
+				console.log("Disconnected");
+				// Try to reconnect after a few seconds
+				setTimeout(function() { wsConnect(url) }, 2000);
+			}
+			
+			// Called when a message is received from the server
+			function onMessage(evt) {
+				
+				// Print out our received message
+				console.log("Received: " + evt.data);
+				obj = JSON.parse(evt.data);
+				
+				if ("BrightVal" in obj) {
+					document.getElementById("BrightSlide").value = obj.BrightVal;
+					document.getElementById("BrightText").innerHTML = "" + obj.BrightVal;
+				}
+			}
+			
+			// Called when a WebSocket error occurs
+			function onError(evt) {
+				console.log("ERROR: " + evt.data);
+			}
+			
+			// Sends a message to the server (and prints it to the console)
+			function doSend(message) {
+				console.log("Sending: " + message);
+				websocket.send(message);
+			}
+			
+			function onBrighChange() {
+				newValue = document.getElementById("BrightSlide").value;
+				console.log("newBrightVal = "+ newValue);
+				document.getElementById("BrightText").innerHTML = ""+ newValue;
+				doSend("{\n  \"BrightVal\": "+ newValue + "\n}");
+			}
+			
+			
+		</script>
+	</body>
+</html>	

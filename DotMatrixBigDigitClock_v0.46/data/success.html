@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="el-GR">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="Dot Matrix Web Clock">
+		<meta name="author" content="Kernel Panic">
+		<title>firmware success</title>
+		<script src="script.js"></script>	
+		<link href="style.css" rel="stylesheet" type="text/css"> 
+		<link href="img/favicon.webp" rel="icon" type="image/x-icon">
+		<!-- Emoji Unicode Reference: https://www.w3schools.com/charsets/ref_emoji.asp 	-->
+        <style>
+			.text {
+			font-size: 4.5vw;
+			text-align:center;
+			color:#32CD32;
+			}
+			
+			div {
+			padding: 10px;
+			border: 1px solid #4CAF50;
+			font-size: 2.1vw;
+			text-align:center;
+			color:#F0FFF0;
+			}
+			.container {
+			font-size: 1.6vw;
+			margin: auto;
+			width: 50%
+			}
+			
+			.btn{
+			font-size: 2.5vw
+			}
+			.btn a{
+			text-decoration: none
+			}
+			.btn{
+			background-image: linear-gradient(#bf0f2a, #57030f);
+			text-shadow: 0 -1px 2px #000;
+			border-radius: 4px;
+			border: 0;
+			color: #d5d5d5;
+			cursor: pointer;display: inline-block;
+			margin: 2px 0;
+			padding: 10px 14px 11px;width: 25%
+			}
+			.btn:hover{
+			background-image: linear-gradient(#992828, #d93636);
+			text-shadow: 0 2px 2px #360101;
+			}
+			.btn:active,.btn:focus{
+			background-image: linear-gradient(#ebebeb, #595858);
+			color:#c40000;
+			}
+			
+		</style>
+	</head>
+	<body>
+		<p class="text">&#128515; Θρίαμβος!</p>
+		<div class="container">
+			Οι επιλογές σου αποθηκεύτηκαν στην μνήμη. <br>
+			Για να ισχύσουν, πρέπει να γίνει επανεκκίνηση. <br>
+			Αν μετά την λήξη της αντίστροφης μέτρησης,<br>
+			ο περιηγητής αποτύχει να εμφανίσει την αρχική σελίδα,<br>
+			θα πρέπει να δεις τις ρυθμίσεις του.
+		</div>
+		
+		<p  align="center">
+			<button  class="btn" onclick="Reboot()">Eπανεκκίνηση</button>  
+		</p>
+		
+		<p class="text"> <span id="timer"></span></p> 
+		
+		<script>
+			function Reboot() {
+				sendRequest("restart");
+				var sec = 20;
+				setInterval(function() {
+					var a = new Date();
+					document.getElementById("timer").innerHTML = sec ;
+					sec--;
+					if(sec == 00)
+					{
+						window.location.assign("index.html");
+					}
+				},1000);
+			}			
+		</script>
+	</body>
+</html>  								
