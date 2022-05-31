@@ -10,9 +10,9 @@ Last update  : 22/05/2022  <br/>
 Author       : kernel panic <br/>
 <p> </p>
      ESP8266 SPI pin ->  LED Matrix Pin  <br/>
-D5  = 14  ->  CLK  <br/>
-D7  = 13  ->  DIN  <br/>
-D8  = 15  ->  CS  <br/>
+D5  = 14             ->  CLK  <br/>
+D7  = 13             ->  DIN  <br/>
+D8  = 15             ->  CS  <br/>
 <br/>
 ESP8266 I2C pin ->  bme Pin  <br/>
 D1  =  5  ->  SCL <br/>
