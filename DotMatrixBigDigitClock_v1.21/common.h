@@ -8,8 +8,8 @@
 
 //----- ESP Wi-Fi networks Settings ------------------------------------------
 #ifdef  OFFICE  // OFFICE WiFi Config
-#define MY_SSID         "Service"                    // Set these to your WiFi desired credentials.
-#define MY_PASS         "6752881254"                 // Set these to your WiFi desired credentials.
+#define MY_SSID         "-*****-"                    // Set these to your WiFi desired credentials.
+#define MY_PASS         "-*******-"                  // Set these to your WiFi desired credentials.
 #define USE_DHCP         false                       // false = Static IP, true = DHCP (Dynamic Host Configuration Protocol)
 #define STATIC_IP       IPAddress(192, 168, 0, 84)
 #define GATEWAY_IP      IPAddress(192, 168, 0, 1)
@@ -17,8 +17,8 @@
 #define DNS1_IP         IPAddress(195, 170, 0, 1)
 #define DNS2_IP         IPAddress(195, 170, 2, 2)
 #define HTTP_PORT       8084                        // port for webserver
-#define NTP_SERVER_1    "10.10.19.5"                // OFFICE primary
-#define NTP_SERVER_2    "10.10.19.6"                // OFFICE secondary 
+#define NTP_SERVER_1    "10.10.29.11"               // OFFICE primary
+#define NTP_SERVER_2    "10.10.29.12"               // OFFICE secondary 
 #else           // Home WiFi Config
 #define MY_SSID         "KernelPanic"               // Set these to your WiFi desired credentials.
 #define MY_PASS         "0123456789"                // Set these to your WiFi desired credentials.
@@ -27,7 +27,7 @@
 #define GATEWAY_IP      IPAddress(192, 168, 1, 1)
 #define NETMASK_IP      IPAddress(255, 255, 255, 0)
 #define DNS1_IP         IPAddress(192, 168, 1, 1)
-#define DNS2_IP         IPAddress(8, 8, 8, 8)		// Google DNS Server IP
+#define DNS2_IP         IPAddress(8, 8, 8, 8)       // Google DNS Server IP
 #define HTTP_PORT       8084                        // port for webserver
 #define NTP_SERVER_1    "gr.pool.ntp.org"           // Greece NTP time server
 #define NTP_SERVER_2    "pool.ntp.org"              // Global NTP time server
@@ -52,7 +52,7 @@
 // Labels parameters For json file
 #define LBL_WIFI_SSID   "WiFiSSID"
 #define LBL_WIFI_PASS   "WiFiPASS"
-#define	LBL_BRIGHTNESS  "BrightVal"                 // Brightness value
+#define	LBL_BRIGHTNESS  "BrightVal"             // Brightness value
 #define	LBL_HOSTNAME    "HostName"
 #define	LBL_DHCP_FLAG   "DHCP_FLAG"
 #define	LBL_HTTP_PORT   "HTTPport"
@@ -123,33 +123,10 @@ time_t  rawtime;
 struct  tm *timeinfo;
 uint8_t DayOfWeek, OLDwday = 8, Hour, Minute, Sec;
 
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
 #endif // COMMON_H
 /*********************************
   END Page
 **********************************/
+//
 
-
-
-/*
-  Το σχέδιο χρησιμοποιεί 456549 bytes (43%) του χώρου αποθήκευσης του προγράμματος. Το μέγιστο είναι 1044464 bytes.
-  Οι καθολικές μεταβλητές χρησιμοποιούν 36508 bytes (44%) δυναμικής μνήμης, αφήνοντας 45412 bytes για τοπικές μεταβλητές. Το μέγιστο είναι 81920 bytes.
-
-  Το σχέδιο χρησιμοποιεί 469445 bytes (44%) του χώρου αποθήκευσης του προγράμματος. Το μέγιστο είναι 1044464 bytes.
-  Οι καθολικές μεταβλητές χρησιμοποιούν 36700 bytes (44%) δυναμικής μνήμης, αφήνοντας 45220 bytes για τοπικές μεταβλητές. Το μέγιστο είναι 81920 bytes.
-
-
-  Το σχέδιο χρησιμοποιεί 456537 bytes (43%) του χώρου αποθήκευσης του προγράμματος. Το μέγιστο είναι 1044464 bytes.
-  Οι καθολικές μεταβλητές χρησιμοποιούν 36488 bytes (44%) δυναμικής μνήμης, αφήνοντας 45432 bytes για τοπικές μεταβλητές. Το μέγιστο είναι 81920 bytes.
-
-  Το σχέδιο χρησιμοποιεί 469433 bytes (44%) του χώρου αποθήκευσης του προγράμματος. Το μέγιστο είναι 1044464 bytes.
-  Οι καθολικές μεταβλητές χρησιμοποιούν 36680 bytes (44%) δυναμικής μνήμης, αφήνοντας 45240 bytes για τοπικές μεταβλητές. Το μέγιστο είναι 81920 bytes.
-
-  Το σχέδιο χρησιμοποιεί 468569 bytes (44%) του χώρου αποθήκευσης του προγράμματος. Το μέγιστο είναι 1044464 bytes.
-  Οι καθολικές μεταβλητές χρησιμοποιούν 37800 bytes (46%) δυναμικής μνήμης, αφήνοντας 44120 bytes για τοπικές μεταβλητές. Το μέγιστο είναι 81920 bytes.
-
-
-
-*/
-
-// -----
