@@ -15,7 +15,7 @@
 #define GATEWAY_IP      IPAddress(192, 168, 0, 1)
 #define NETMASK_IP      IPAddress(255, 255, 255, 0)
 #define DNS1_IP         IPAddress(195, 170, 0, 1)
-#define DNS2_IP         IPAddress(195, 170, 2, 2)
+#define DNS2_IP         IPAddress(212, 205, 212, 205)
 #define HTTP_PORT       8084                        // port for webserver
 #define NTP_SERVER_1    "10.10.29.11"               // OFFICE primary
 #define NTP_SERVER_2    "10.10.29.12"               // OFFICE secondary 
