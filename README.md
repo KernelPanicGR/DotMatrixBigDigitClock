@@ -22,7 +22,7 @@ D2  =  4  ->  SDA <br/>
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=<br/>
   Reference: <br/>
   MajicDesigns/MD_Parola        -> https://github.com/MajicDesigns/MD_Parola <br/>
-  Me No Dev[ESPAsyncWebServer]  -> https://github.com/me-no-dev/ESPAsyncWebServer  <br/>
+  Me No Dev [ESPAsyncWebServer]  -> https://github.com/me-no-dev/ESPAsyncWebServer  <br/>
   Benoît Blanchon/ArduinoJson   -> https://github.com/bblanchon/ArduinoJson <br/>
   Assistant for ArduinoJson     -> https://arduinojson.org/v6/assistant  <br/>
   more info for ArduinoJson     -> https://arduinojson.org <br/>
