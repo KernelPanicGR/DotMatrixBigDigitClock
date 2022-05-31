@@ -112,7 +112,7 @@ bool        fsOK,
             FlagEventWather,
             FlagEventInfo;
 
-uint16_t	NTPsyncEvery;// interval, synchronization with NTP server, in minutes.
+uint16_t    NTPsyncEvery;// interval, synchronization with NTP server, in minutes.
 
 
 // setup time
