@@ -1,0 +1,712 @@
+<!doctype html>
+<html lang="en">
+<head>
+ <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>MD_MAX72XX Font Editor</title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/solid.css" integrity="sha384-rdyFrfAIC05c5ph7BKz3l5NG5yEottvO/DQ0dCrwD8gzeQDjYBHNr1ucUpQuljos" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/fontawesome.css" integrity="sha384-u5J7JghGz0qUrmEsWzBQkfvc8nK3fUT7DCaQzNQ+q4oEXhGSx+P2OqjWsfIRB8QT" crossorigin="anonymous">
+<style>
+
+	* {
+		box-sizing: border-box;
+	}
+	body {
+		background-color:#444;
+		font: 10pt sans-serif;
+		line-height: 18pt;
+		color:#c3c3c3;
+	}
+
+	#app {
+		margin-top: 20px;
+		margin-bottom: 20px;
+	}
+
+	#editor .toolbar {
+		position: relative;
+		background: #333;
+		padding-top: .5rem;
+		padding-left: .5rem;
+		border-radius: 6px;
+	}
+
+	.loaded_char {
+		display: inline-block;
+		font-weight: 400;
+		text-align: left;
+		white-space: nowrap;
+		vertical-align: middle;
+		border: 1px solid #222;
+		padding: .375rem .75rem;
+		font-size: 1rem;
+		line-height: 1.5;
+		border-radius: .25rem;
+		min-width: 110px;
+		background: #222;
+	}
+
+	.loaded_char .badge {
+		vertical-align: text-bottom;
+	}
+
+	.title {
+		display: block;
+		position: absolute;
+		margin-bottom: 8px;
+		right: 15px;
+		font-style: italic;
+		font-weight: bolder;
+		font-size: 22px;
+		color: #444;
+		text-align: right;
+		line-height: 22px;
+	}
+
+	.title .sub {
+		display: block;
+		font-size: 12px;
+		line-height: 10px;
+	}
+
+	.vertical-rule{
+		display: inline-block;
+		height: 30px;
+		width: 1px;
+		background: #444;
+	}
+
+	#editor .char_width {
+		width:80px;
+	}
+	
+	#editor .char_name {
+		min-width: 100px;
+	}
+
+	#editor .char_preview {
+		display: block;
+		background: #222;
+		margin-right: 10px;
+		min-width: 196px;
+		overflow: auto;
+		width: fit-content;
+	}
+
+	#editor .char_preview .column {
+		float: left;
+	}
+
+
+	#editor textarea,
+	#cfont {
+		font-size: 8pt;
+	}
+
+
+	input[type=checkbox].led {
+		position:absolute; z-index:-1000; left:-1000px; overflow: hidden; clip: rect(0 0 0 0); height:1px; width:1px; margin:-1px; padding:0; border:0;
+	}
+
+	input[type=checkbox].led + label.led {
+		height:24px; 
+		width:24px;
+		display:inline-block;
+		background-repeat:no-repeat;
+		background-position: 0 0;
+		vertical-align:middle;
+		cursor:pointer;
+
+	}
+
+	input[type=checkbox].led:checked + label.led {
+		background: red;
+	}
+
+	label.led {
+		border: solid 1px #333;
+		border-radius: 20px;
+		background: #555555;
+		-webkit-touch-callout: none;
+		-webkit-user-select: none;
+		-khtml-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
+		margin: 0px;
+		padding: 0px;
+	}
+
+	label {
+		text-transform: uppercase;
+		font-size: 7pt;
+		display: block;
+	}
+	input[type=number],
+	input[type=text] {
+		margin-bottom: 10px;
+	}
+
+
+	button {
+		min-width: 28px;
+	}
+
+	#charTable {
+		position: relative;
+		font-size: 7pt;
+		line-height: 9pt;
+		overflow: auto;
+	}
+
+	#charTable .char {
+		padding: 2px;
+		display: block;
+		margin-bottom: 5px;
+		float: left;
+		border: solid 1px transparent;
+	}
+	#charTable .char.active {
+		border-color: #0069d9;
+	}
+
+
+	#charTable .char .char_preview {
+		display: block;
+		background: #222;
+		min-width: 32px;
+		height: 32px;
+		border-top: solid 1px #222;
+		border-left: solid 1px #222;
+	}
+
+	#charTable .char .char_preview div {
+	    height: 4px;
+		width: 4px;
+		float: left;
+		background: #555;
+		border-right: solid 1px #222;
+		border-bottom: solid 1px #222;
+    	border-radius: 2px;
+	}
+
+	#charTable .char_preview div.on {
+		background: red;
+	}
+
+	#cfont {
+		width:100%;
+		overflow: scroll;
+	}
+
+</style>
+<!-- development version, includes helpful console warnings -->
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<!-- production version, optimized for size and speed -->
+<!--script src="https://cdn.jsdelivr.net/npm/vue"></script-->
+
+</head>
+<body>
+
+	<div id="app" class="container">
+		<div id="editor">
+			<div class="toolbar form-inline">
+				<div class="loaded_char mb-2 mr-sm-2" >#&nbsp;<span>{{ loadedCharIndex }}</span>&nbsp;<span class="badge badge-primary">{{ ascii[loadedCharIndex] }}</span></div>
+				<div class="btn-group  mb-2 mr-sm-2" role="group">
+					<button type="button" @click="editorPrev" class="btn btn-primary" >Prev</button>
+					<button type="button" @click="editorNext"  class="btn btn-primary" >Next</button>
+				</div>
+				<div class="input-group mb-2 mr-sm-2">
+					<div class="input-group-prepend">
+						<div class="input-group-text">Width</div>
+					</div>
+					<input type="text" min=1 max=20 :value="charColsLength" disabled class="form-control char_width">
+					<div class="input-group-append">
+							<button type="button" @click="editorRemoveCol" class="btn btn-primary" ><i class="fas fa-minus"></i></button>
+							<button type="button" @click="editorAddCol" class="btn btn-primary" ><i class="fas fa-plus"></i></button>
+					</div>
+				</div>
+				<button type="button" @click="editorFit" class="btn btn-primary mb-2 mr-sm-2" ><i class="fas fa-text-width"></i> Fit</button>
+				<button type="button" @click="editorSave" class="btn btn-primary mb-2 mr-sm-2" ><i class="fas fa-save"></i> Save</button>
+				<button type="button" @click="editorClear" class="btn btn-danger mb-2 mr-sm-2" ><i class="fas fa-eraser"></i> Clear</button>
+				<div class="btn-group mb-2 mr-sm-2">
+					<button type="button" @click="editorDelete" class="btn btn-danger" ><i class="fas fa-trash"></i> Delete</button>
+					<button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<span class="sr-only">Toggle Dropdown</span>
+					</button>
+					<div class="dropdown-menu">
+						<a href="#" @click.prevent="resetFont" class="dropdown-item text-danger" ><i class="fas fa-exclamation-triangle "></i> Delete all chars</a>
+					</div>
+				</div>
+				<span class="vertical-rule mb-2 mr-sm-2"></span>
+				<div class="title">MD_MAX72XX<span class="sub"># FONT EDITOR</span></div>
+			</div>
+			<hr>
+			<div class="row">
+				<div class="col-sm-3">
+					<div class="form-group" v-for="(char, i) in editor.char" v-if="editor.char[i].cols.length">
+						<div class="input-group" >
+							<div class="input-group-prepend">
+								<div class="input-group-text">Label</div>
+							</div>
+							<input type="text" v-model="editor.char[i].label" class="form-control">
+						</div>
+					</div>
+					<div class="form-group">
+						<textarea rows="5" v-model="encodedChar" disabled class="form-control"></textarea> 
+					</div>
+				</div>
+				<div class="col-sm-9">
+					<div class="char_preview" v-for="(char, i) in editor.char">
+						<div class="column" v-for="(column, col_i) in editor.char[i].cols">
+							<div class="led-container"  v-for="(led, led_i) in column">
+								<input type="checkbox" 
+									:id="i+'led-'+col_i+led_i" 
+									:name="i+'led-'+col_i+led_i" 
+									class="led" 
+									v-model="editor.char[i].cols[col_i][led_i]" 
+									true-value=1 
+									false-value=0 
+								/>
+								<label :for="i+'led-'+col_i+led_i" class="led"></label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<hr>
+		<div class="row">
+			<div class="col-sm-3">
+				<div class="form-inline">
+					<button type="button" @click="importFont" class="btn btn-primary mb-2 mr-sm-2" ><i class="fas fa-arrow-up"></i> Import</button>
+					<button type="button" @click="exportFont" class="btn btn-primary mb-2 mr-sm-2" ><i class="fas fa-arrow-down"></i> Export</button>
+				</div>
+				<div class="input-group mb-2">
+					<div class="input-group-prepend">
+						<div class="input-group-text">Name</div>
+					</div>
+					<input type="text" v-model="font.name" class="form-control">
+				</div>
+				<div class="form-check">
+					<input class="form-check-input" type="checkbox" name="double_height" id="double_height" v-model="font.double_height" @change="editorLoadChar(32)" >
+					<label class="form-check-label" for="double_height">Double height</label>
+				</div>
+				<div class="form-group">
+					<textarea id="cfont" rows="44" wrap="off" v-model="cfont" class="form-control"></textarea>	
+				</div>
+				
+			</div>
+			<div class="col-sm-9">
+				<div id="charTable">
+					<div class="char" 
+						v-for="(char, char_i) in font.chars"
+						v-on:click.prevent="editorLoadChar(char_i)"
+						v-if="! font.double_height || font.double_height && char_i < 127"
+					>
+						<char-preview :char="font.chars[char_i+128].cols"  v-if="font.double_height" class="char_preview"></char-preview>
+						<char-preview :char="font.chars[char_i].cols" class="char_preview"></char-preview>
+
+						<div v-if="false">
+						<div class="char_preview" v-if="font.double_height">
+							<div class="column" v-for="(column, col_i) in font.chars[char_i+128].cols">
+								<div v-for="(led, led_i) in column" 
+									:class="{ on: parseInt(led) }"
+								>
+								</div>
+							</div>
+						</div>
+						<div class="char_preview">
+							<div class="column" v-for="(column, col_i) in char.cols">
+								<div v-for="(led, led_i) in column" 
+									:class="{ on: parseInt(led) }"
+								>
+								</div>
+							</div>
+						</div>
+						</div>
+
+						<div>
+							<span>{{ char_i }}</span><span v-if="font.double_height">/{{ char_i + 128 }}</span><br>
+							<span>{{ ascii[char_i] }}</span>
+						</div>
+					</div>
+				</div>
+				<hr>	
+			</div>
+
+		</div>
+
+
+	</div>
+	<script type="text/x-template" id="char-preview-template">
+		<div class="my-canvas-wrapper">
+			<canvas ref="my-canvas"></canvas>
+		</div>
+	</script>
+	
+	<script>
+
+	new Vue({
+		el: '#app',
+		data: {
+			editor: {
+				char: [
+					{
+						cols: [],
+						index: "",
+						label: "",
+					},
+					{
+						cols: [],
+						index: "",
+						label: "",
+					}
+				],
+				encoded: "",
+				decoded: "",		
+			},
+			empty_char:  {
+				cols: [
+					[0,0,0,0,0,0,0,0],
+					[0,0,0,0,0,0,0,0],
+					[0,0,0,0,0,0,0,0],
+					[0,0,0,0,0,0,0,0],
+					[0,0,0,0,0,0,0,0],
+					[0,0,0,0,0,0,0,0],
+					[0,0,0,0,0,0,0,0],
+					[0,0,0,0,0,0,0,0],
+				],
+				label: "" 
+			},
+			font: {
+				name: '',
+				chars: [],
+				double_height: false,
+			},
+			cfont: "",
+			ascii: []
+		},
+		computed: {
+			charColsLength: function () {
+				return this.editor.char[0].cols.length;
+			},
+			encodedChar: function () {
+				var encoded_char = '';
+				for (var i = 0; i < 2; i++) {
+					if (! this.editor.char[i].cols.length ) continue;
+					encoded_char += this.encodeChar(this.editor.char[i], this.editor.char[i].index) + '';
+				}
+				return encoded_char
+			},
+			loadedCharIndex: function () {
+				var i = 0;
+				if( this.font.double_height) i = 1;
+				return this.editor.char[i].index;
+			},
+			
+		},
+		watch: {
+			font: {
+				handler() {
+					localStorage.setItem('font', JSON.stringify(this.font));
+				},
+				deep: true,
+			},
+		},
+		created: function () {
+			// build default ASCII char list
+			var ascii = "NUL,SOH,STX,ETX,EOT,ENQ,ACK,BEL,BS,HT,LF,VT,FF,CR,SO,SI,DLE,DC1,DC2,DC3,DC4,NAK,SYN,ETB,CAN,EM,SUB,ESC,FS,GS,RS,US,SPACE,!,\",#,$,%,&,',(,),*,+,COMA,-,.,/,0,1,2,3,4,5,6,7,8,9,:,;,<,=,>,?,@,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,[,\,],^,_,`,a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,{,|,},~,,€, ,‚,ƒ,„,…,†,‡,ˆ,‰,Š,‹,Œ, ,Ž, , ,‘,’,“,”,•,–,—,˜,™,š,›,œ, ,ž,Ÿ, ,¡,¢,£,¤,¥,¦,§,¨,©,ª,«,¬,­,®,¯,°,±,²,³,´,µ,¶,·,¸,¹,º,»,¼,½,¾,¿,À,Á,Â,Ã,Ä,Å,Æ,Ç,È,É,Ê,Ë,Ì,Í,Î,Ï,Ð,Ñ,Ò,Ó,Ô,Õ,Ö,×,Ø,Ù,Ú,Û,Ü,Ý,Þ,ß,à,á,â,ã,ä,å,æ,ç,è,é,ê,ë,ì,í,î,ï,ð,ñ,ò,ó,ô,õ,ö,÷,ø,ù,ú,û,ü,ý,þ,ÿ,";
+			ascii = ascii.split(",");
+			ascii[44] = ",";
+			this.ascii = ascii;
+		},
+		mounted() {
+			if (localStorage.getItem('font')) {
+				this.font = JSON.parse(localStorage.getItem('font'));
+				this.editorLoadChar(32);
+			}  else {
+				this.resetFont();
+			}
+		},
+		methods: {
+			// Load char to editor
+			editorLoadChar(index){
+				var char = [];
+				char.push(this.font.chars[index]);
+				if (this.font.double_height) char.unshift(this.font.chars[index + 128]);
+				// clear editor
+				for (var i = 0; i < 2; i++) {
+					this.editor.char[i].cols = [];
+					this.editor.char[i].index = '';
+					this.editor.char[i].label = '';
+				}
+				// load char(s)
+				for (var i = 0; i < char.length; i++) {
+					// "JSON.parse(JSON.stringify(char))" makes a shallow unlinked copy
+					if(char[i].cols.length) {
+						// edit the char
+						this.editor.char[i].cols = JSON.parse(JSON.stringify(char[i].cols));
+					} else {
+						// copy a default "empty" char
+						this.editor.char[i].cols = JSON.parse(JSON.stringify(this.empty_char.cols));
+					}
+					this.editor.char[i].label = JSON.parse(JSON.stringify(char[i].label));
+					if (i == 0 && this.font.double_height) {
+						this.editor.char[i].index = index + 128;
+					} else {
+						this.editor.char[i].index = index;
+					}
+				}
+			},
+			editorSave(){
+				for (var i = 0; i < 2; i++) {
+					var index = this.editor.char[i].index;
+					if (! this.editor.char[i].cols.length) continue;
+					this.font.chars[index].cols = JSON.parse(JSON.stringify(this.editor.char[i].cols)); 
+					this.font.chars[index].label = JSON.parse(JSON.stringify(this.editor.char[i].label));
+				}
+			},
+			editorAddCol(){
+				var i, length;
+				for ( i = 0; i < 2; i++) {
+					length = this.editor.char[i].cols.length;
+					if (! length || length == 24 ) continue;
+					this.editor.char[i].cols.push([0,0,0,0,0,0,0,0])
+				}
+			},
+			editorRemoveCol(){
+				var i, length;
+				for (var i = 0; i < 2; i++) {
+					length = this.editor.char[i].cols.length;
+					if (! length || length == 1) continue;
+					this.editor.char[i].cols.splice(-1,1);
+				}
+			},
+			editorFit(){
+				var char = this.editor.char;
+				var cropped = [], merged = [], i, length, from, to;
+				// join char cols and parse int 
+				for (i = 0; i < char[0].cols.length; i++) {
+					if ( char[1].cols.length ) {
+						merged.push( parseInt(char[0].cols[i].join('') + char[1].cols[i].join(''),2) );
+					} else {
+						merged.push( parseInt(char[0].cols[i].join(''),2) );
+					}
+				}
+				
+				i = 0;
+				length = merged.length;
+				from = 0;
+				// find empty cols at the beginning and at the end
+				while ( merged[i] == 0) {
+					from ++;
+					i ++;
+				}
+				to = length;
+				while ( merged[to -1] == 0) {
+					to --;
+				}
+
+				if (! to) return;
+			
+				for (var i = 0; i < 2; i++) {
+					if (! char[i].cols.length ) continue;
+					char[i].cols = char[i].cols.slice(from, to);
+
+				}
+
+
+			},	
+			editorClear(){
+				for (var i = 0; i < 2; i++) {
+					if (! this.editor.char[i].cols.length) continue;
+					var width = this.editor.char[i].cols.length;
+					var empty = [];
+					for (var c = 0; c < width; c++) {
+						empty.push([0,0,0,0,0,0,0,0]);
+					}
+					this.editor.char[i].cols = empty;
+				}
+			},
+			editorDelete(){
+				for (var i = 0; i < 2; i++) {
+					if (! this.editor.char[i].cols.length) continue;
+					var index = this.editor.char[i].index;
+					this.font.chars[index].cols = [];
+					this.editor.char[i].cols = JSON.parse(JSON.stringify(this.empty_char.cols));
+				}
+			},
+			editorPrev(){
+				var i = 0;
+				if( this.font.double_height) i = 1;
+				var index = this.editor.char[i].index;
+				if( index != 0) this.editorLoadChar( index - 1);
+			},
+			editorNext(){
+				var i = 0;
+				var l = 254;
+				if( this.font.double_height) {
+					i = 1;
+					l = 126;
+				}
+				var index = this.editor.char[i].index;
+				// console.log(index);
+				if(index != l) this.editorLoadChar(index + 1);	
+			},
+			resetFont (){
+				this.font.chars = [];
+				for (var i = 0; i <= 255; i++) {
+					this.font.chars.push( {
+						cols: [],
+						label: ''
+					})
+				}
+				this.font.name = 'newFont';
+				this.editorLoadChar(32);
+			},
+			importFont (){
+				// ToDo validation
+				var cfont = this.cfont;
+				var cfont_header, cfont_start, cfont_end, name_start, name_end;
+				var cfont_chars;
+				var chars = [];
+				var char = [];
+				name_start = cfont.indexOf('e_t') + 4;
+				name_end = cfont.indexOf('[]');
+				this.font.name = cfont.substring(name_start, name_end);
+				cfont_start = cfont.indexOf('{') + 1;
+				cfont_end = cfont.lastIndexOf('}');
+				cfont_chars = cfont.substring(cfont_start, cfont_end);
+				//cfont_chars = cfont_chars.replace(/[\n\r]/g,'|');
+				chars = cfont_chars.split("\n");
+				for (var i = 0; i < chars.length; i++) {
+					chars[i] = chars[i].split(",");
+				}
+				// remove empty
+				chars = chars.filter(function (el) {
+					return el != "";
+				});
+				this.resetFont();	
+				for (var i = 0; i < chars.length -1; i++) {
+					var label;
+					this.font.chars[i].cols = this.decodeChar(chars[i]); 
+					// handle label
+					label = chars[i].slice(-1)[0].replace(/(\t|\/\/)+ [0-9]+/g,'');
+					label = this.labelStrip(label);
+					this.font.chars[i].label = label;
+				}
+			},
+			decodeChar (char){
+				if (parseInt(char[0]) == 0) {
+					return [];
+				}
+				var char_cols = char.slice(1, char.length - 1);
+				var decoded_cols = char_cols.map(function (value) {
+					value = parseInt(value, 10).toString(2).padStart(8, '0');
+					return value.split('').reverse();
+				});
+				return decoded_cols;
+			}, 
+			exportFont (){
+				var font = this.font;
+				var cfont = '';
+				cfont += 'MD_MAX72XX::fontType_t ' + font.name + '[] PROGMEM = \n{\n';
+				for (var i = 0; i <= 255; i++) {
+					var char = font.chars[i];
+					cfont += '\t' + this.encodeChar(char, i); 
+				}
+				cfont += '}';
+				this.cfont = cfont;
+			},
+			encodeChar (char, index = 0){
+				var encoded_char = '';
+				var width = char.cols.length; 
+				var label = char.label;
+				var reversed;
+				if (! width) {
+					encoded_char += '0, ';
+				} else {
+					encoded_char += width +  ', ';
+					for (var i = 0; i < width; i++) {
+
+						reversed = char.cols[i].slice().reverse().join('');
+						encoded_char += parseInt(reversed, 2);
+						encoded_char += ', '; 
+					}
+				}
+				// Handle label
+				encoded_char += '\t// ' + index; 
+				if (label === "") label = this.ascii[index]; // use default ANSII char for label
+				encoded_char += this.labelFormat(label);
+				encoded_char += '\n'; // new line
+				return encoded_char
+			},
+			labelStrip (label) {
+				// clear prepends and appends
+				// ToDo: better handling for "'" char label, current regex will create empty label
+				label = label.replace(/(^\s+)|(\s*- ' *?)|('+$)/g,'');
+				return label;
+			},
+			labelFormat (label) {
+				var label_formated = '';
+				label_formated += ' - \''; // prepend " - '"					
+				label_formated += this.labelStrip(label);
+				label_formated += '\''; // append "'""
+				return label_formated;
+			}
+		}
+	})
+
+	Vue.component('char-preview', {
+		template: '#char-preview-template',
+		props: ['char'],
+		watch: {
+			char: function(val, oldVal) {
+				this.renderChar();
+			}
+		},
+		mounted() {
+			this.renderChar();
+		},
+		methods: {
+			renderChar () {
+				var c = this.$refs['my-canvas'];
+				var cols = this.char;
+				c.width = 8*4;
+				c.height = 8*4;
+				if(! cols.length) return;
+				var cw = cols.length;
+				var ch = cols[0].length;
+				c.width = cw * 4;
+				c.height = ch * 4;
+				var ctx = c.getContext("2d");
+
+				for (var x=0; x<cw; x++) {
+					for (var y=0; y<ch; y++) {
+						if (parseInt(cols[x][y])) {
+							ctx.fillStyle = '#FF0000';
+						} else {
+							ctx.fillStyle = '#333333';
+						}
+						ctx.lineWidth = 1;
+						ctx.strokeStyle = '#222222';
+						ctx.beginPath();
+						ctx.arc(x*4+2, y*4+2, 2, 0, 2*Math.PI)
+						ctx.fill();
+						ctx.stroke();
+						//ctx.fillRect(x*4, y*4, 4, 4);
+					}
+				}
+			}
+		}
+	})
+	</script>
+
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>

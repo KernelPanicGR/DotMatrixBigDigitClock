@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="el-GR">
+
+<head>
+	<title>Πληροφορίες</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Dot Matrix Web Clock">
+	<meta name="author" content="Kernel Panic">
+	<script src="script.js"></script>
+	<link href="style.css" rel="stylesheet" type="text/css">
+	<link href="favicon.ico" rel="icon" type="image/x-icon">
+	<style>
+		#xTime {
+			font-size: 1.7em;
+			text-align: center;
+			color: #e5e5e5;
+			margin: 2px;
+			padding: 2px;
+		}
+
+		fieldset {
+			border-radius: 0.5rem;
+			margin: 2px;
+		}
+
+		.grid-container {
+			display: grid;
+			grid-template-columns: auto auto;
+			grid-gap: 3px;
+			padding: 1px;
+		}
+
+		.grid-container>div {
+			padding: 1px 0;
+		}
+
+		.itemINFO {
+			grid-column: 1 / span 2;
+			background-color: rgb(25, 25, 25);
+			color: rgb(255, 255, 255);
+			text-align: left;
+			font-style: italic;
+		}
+
+		.itemLeft {
+			text-align: right;
+		}
+
+		.itemRight {
+			text-align: left;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container">
+		<aside class="sidebar">
+			<nav class="nav">
+				<ul class="nav-items">
+					<!--  <li class="nav-title">Menu</li>  -->
+					<li><a class="nav-link" href="index.htm"> <img src="img/home.svg" /></a></li>
+					<li><a class="active" href="info.html"><img src="img/info.svg" /></a></li>
+					<li><a class="nav-link" href="weather.html"><img src="img/weather.svg" /></a></li>
+					<li><a class="nav-link" href="brightness.html"><img src="img/brightness.svg" /></a></li>
+					<li><a class="nav-link" href="edit"><img src="img/Edit.svg" /></a></li>
+					<li><a class="nav-link" href="config.html"><img src="img/wifi.svg" /></a></li>
+					<li><a class="nav-link" href="firmware.html"><img src="img/upload.svg" /></a></li>
+					<div class="sidebar-separator"></div>
+					<li><a class="nav-link" href="javascript:restartcpu();"><img src="img/reboot.svg" /></a></li>
+				</ul>
+			</nav>
+		</aside>
+		<div class="menubutton">
+			<div class="bar"></div>
+			<div class="bar"></div>
+			<div class="bar"></div>
+		</div>
+	</div>
+
+	<main class="main" role="main">
+		<h1 id="xTime"></h1>
+		<center>
+			<fieldset>
+				<legend id="message"></legend>
+				<div class="grid-container">
+					<div class="itemINFO"> Πληροφορίες Χρόνου</div>
+					<div class="itemLeft">Daylight Saving Time : </div>
+					<div class="itemRight" id="x_DST"></div>
+
+					<div class="itemLeft">Η δική σου ώρα : </div>
+					<div class="itemRight" id="MyLoctime"></div>
+					<div class="itemLeft">Έχεις την σωστή ώρα? : </div>
+					<div class="itemRight">
+						<a style="color:#529ef5" href="https://time.is/" target="_blank">Δες εδώ</a>
+					</div>
+					<div class="itemLeft">NTP server :</div>
+					<div class="itemRight" style="color:#f9d686" id="x_NTPserver"></div>
+					<div class="itemLeft">Συγχρονίστηκε : </div>
+					<div class="itemRight" style="color:#47bbf9" id="xNTPLastSync"></div>
+					<div class="itemLeft">Time From Boot :</div>
+					<div class="itemRight" id="xTimeFromBoot"></div>
+
+					<div class="itemINFO"> Πληροφορίες για το WiFi</div>
+					<div class="itemLeft">URL : </div>
+					<div class="itemRight" id="x_WinHost"></div>
+					<div class="itemLeft">WiFi SSID :</div>
+					<div class="itemRight" id="wifissid"></div>
+					<div class="itemLeft">WiFi Channel : </div>
+					<div class="itemRight" id="wifichannel"></div>
+					<div class="itemLeft">WiFi RSS : </div>
+					<div class="itemRight" id="wifiRSSI"></div>
+					<div class="itemLeft">Local IP : </div>
+					<div class="itemRight" id="x_ip"></div>
+					<div class="itemLeft">Netmask : </div>
+					<div class="itemRight" id="x_netmask"></div>
+					<div class="itemLeft">Gateway : </div>
+					<div class="itemRight" id="x_gateway"></div>
+					<div class="itemLeft">DNS : </div>
+					<div class="itemRight" id="x_DNS"></div>
+					<div class="itemLeft">mDNS Host : </div>
+					<div class="itemRight" id="x_HostName"></div>
+					<div class="itemLeft">HTTP port : </div>
+					<div class="itemRight" id="x_HTTP_PORT"></div>
+
+					<div class="itemINFO"> Πληροφορίες για το ESP</div>
+					<div class="itemLeft">Όνομα έργου : </div>
+					<div class="itemRight" id="x_Project">ESP8266 ??</div>
+					<div class="itemLeft">Εγγραφή FW : </div>
+					<div class="itemRight" id="x_PrjDate"></div>
+					<div class="itemLeft">ESP Mac Address : </div>
+					<div class="itemRight" id="x_mac"></div>
+					<div class="itemLeft">ESP SDK Version : </div>
+					<div class="itemRight" id="x_SDKver"></div>
+					<div class="itemLeft">ESP Core Version : </div>
+					<div class="itemRight" id="x_CoreVersion"></div>
+					<div class="itemLeft">MCU Frequency : </div>
+					<div class="itemRight" id="x_MCUfrq"></div>
+					<div class="itemLeft">Flash Speed : </div>
+					<div class="itemRight" id="x_FlashSpeed"></div>
+					<div class="itemLeft">Size of sketch : </div>
+					<div class="itemRight" id="x_SketchSize"></div>
+					<div class="itemLeft">Free sketch space : </div>
+					<div class="itemRight" id="x_FrSketchSpace"></div>
+					<div class="itemLeft">FS Total : </div>
+					<div class="itemRight" id="x_FStotal"></div>
+					<div class="itemLeft">FS Used : </div>
+					<div class="itemRight" id="x_FSused"></div>
+					<div class="itemLeft">Available heap size : </div>
+					<div class="itemRight" id="x_FreeHeap"></div>
+					<div class="itemLeft">Fragmentation : </div>
+					<div class="itemRight" id="x_HeapFrag"></div>
+				</div>
+			</fieldset>
+			<p></p>
+		</center>
+	</main>
+	<script>
+		// === Menu ===
+		var container = document.querySelector(".container");
+		var main = document.querySelector(".main");
+		document.querySelector(".menubutton").addEventListener("click", toggleSidebar, false);
+
+		container.addEventListener("click", function (e) {
+			if (isShowingSidebar() && main.contains(e.target)) {
+				e.preventDefault();
+				hideSidebar();
+			}
+		}, true);
+
+		// === Start ===
+		function Start() {
+			if (start) {
+				Running();
+			} else {
+				document.getElementById('xTime').innerHTML = "<span style='color:#d00;'>OFF Line </span>";
+				document.getElementById('message').innerHTML = "<span style='color:#f44;'>OFF Line </span>";
+			}
+		}
+
+		// === Get WiFi Info ===
+		function Running() {
+			sendRequest("ReadMy_info", readWiFiInfo);
+			var source = new EventSource('/eventinfo');
+			source.addEventListener("open", function (e) {
+				document.getElementById("message").innerHTML = "<font color=#3d3>info</font>";
+				console.log("eventinfo Connected");
+			}, false);
+
+			source.addEventListener("error", function (e) {
+				if (e.target.readyState != EventSource.OPEN) {
+					document.getElementById('message').innerHTML = "<span style='color:#888;'>info</span>";
+					console.log("eventinfo Disconnected");
+				}
+			}, false);
+
+			source.addEventListener("JsonTimeNow", function (e) {
+				//	console.log("Time Now:", e.data);
+				document.getElementById("xTime").innerHTML = e.data;
+			}, false);
+
+			source.addEventListener("JsonTimeFromBoot", function (e) {
+				//	console.log("Time From Boot:", e.data);
+				document.getElementById("xTimeFromBoot").innerHTML = e.data;
+			}, false);
+
+			source.addEventListener("JsonNTPLastSync", function (e) {
+				//	console.log("NTP Last Sync:", e.data);
+				document.getElementById("xNTPLastSync").innerHTML = e.data;
+			}, false);
+
+			source.addEventListener("JsonFreeHeap", function (e) {
+				//	console.log("Free Heap:", e.data);
+				document.getElementById("x_FreeHeap").innerHTML = e.data;
+			}, false);
+
+			source.addEventListener("JsonHeapFrag", function (e) {
+				//	console.log("Heap Frag:", e.data);
+				document.getElementById("x_HeapFrag").innerHTML = e.data;
+			}, false);
+		}
+
+		function readWiFiInfo(msg) {
+			var obj = JSON.parse(msg);
+			let MyDTS = obj.JsonDST;
+			document.getElementById("x_DST").innerHTML = Boolean(MyDTS) ? "Ναι [Θερινή ώρα]" : "Όχι [Χειμερινή ώρα]";
+			document.getElementById("x_NTPserver").innerHTML = obj.JsonNTP;
+			document.getElementById("wifissid").innerHTML = obj.JsonSSID;
+			document.getElementById("wifichannel").innerHTML = obj.JsonWiFiCh;
+			document.getElementById("wifiRSSI").innerHTML = obj.JsonRSSI;
+
+			document.getElementById("x_WinHost").innerHTML = window.location.href;
+			document.getElementById("x_ip").innerHTML = obj.JsonIP;
+			document.getElementById("x_netmask").innerHTML = obj.JsonNetmask;
+			document.getElementById("x_gateway").innerHTML = obj.JsonGateway;
+			document.getElementById("x_DNS").innerHTML = obj.JsonDNSip;
+			document.getElementById("x_HTTP_PORT").innerHTML = obj.HTTPport;
+			var Myport = obj.HTTPport;
+			document.getElementById("x_HostName").innerHTML = "http://" + obj.HostName + ".local:" + Myport;
+
+			document.getElementById("x_Project").innerHTML = obj.JsonProject;
+			document.getElementById("x_PrjDate").innerHTML = obj.JsonPrjDate;
+			document.getElementById("x_mac").innerHTML = obj.JsonMacAdd;
+			document.getElementById("x_SDKver").innerHTML = obj.JsonSDKver;
+			document.getElementById("x_CoreVersion").innerHTML = obj.JsonCoreVersion;
+			document.getElementById("x_MCUfrq").innerHTML = obj.JsonMCUfrq + " MHz";
+			document.getElementById("x_FlashSpeed").innerHTML = obj.JsonFlashSpeed + " MHz";
+			document.getElementById("x_SketchSize").innerHTML = obj.JsonSketchSize;
+			document.getElementById("x_FrSketchSpace").innerHTML = obj.JsonFrSketchSpace;
+			document.getElementById("x_FStotal").innerHTML = obj.JsonFStotal;
+			document.getElementById("x_FSused").innerHTML = obj.JsonFSused;
+		}
+
+		// === internal Local time ===
+		setInterval(myLoctime, 1000);
+		function myLoctime() {
+			let d = new Date();
+			document.getElementById("MyLoctime").innerHTML = d.toLocaleString("el-GR", { hour12: false });
+		}
+	</script>
+</body>
+
+</html>

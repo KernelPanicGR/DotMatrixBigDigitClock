@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="el-GR">
+
+<head>
+	<title>ESP Configuration</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Dot Matrix Web Clock">
+	<meta name="author" content="Kernel Panic">
+	<script src="script.js"></script>
+	<link href="style.css" rel="stylesheet" type="text/css">
+	<link href="favicon.ico" rel="icon" type="image/x-icon">
+	<style>
+		body {
+			text-align: center;
+		}
+
+		div {
+			padding: 2px;
+		}
+
+		textarea,
+		input,
+		select {
+			background: #eee;
+			/*font-size: 10px;*/
+			font-size: 0.95rem;
+			padding: 3px;
+			width: 100%
+		}
+
+		.btn {
+			border: 2px solid #555;
+			border-radius: 6px;
+			padding: 5px 0px;
+			color: #eee;
+			text-align: center;
+			text-decoration: none;
+			display: inline-block;
+			font-size: 1.08rem;
+			margin: 7px 0;
+			transition-duration: 0.4s;
+			cursor: pointer;
+			width: 50%;
+		}
+
+		.btn:hover {
+			color: orange;
+			border-color: white;
+		}
+
+		.btn:active {
+			border-color: red;
+			transform: translateY(4px);
+		}
+
+		.save {
+			background-color: #211;
+		}
+
+		.save:hover {
+			color: rgb(255, 89, 89);
+		}
+
+		label>* {
+			display: inline
+		}
+
+		form>* {
+			display: block;
+			margin-bottom: 10px
+		}
+
+		textarea:focus,
+		input:focus,
+		select:focus {
+			border-color: #599
+		}
+
+		input[type='checkbox'] {
+			float: left;
+			width: 25px
+		}
+
+		fieldset {
+			border-radius: 0.5rem;
+			margin: 0px;
+		}
+
+		input[type="text"]:disabled {
+			background: #444;
+			color: #999;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container">
+		<aside class="sidebar">
+			<nav class="nav">
+				<ul class="nav-items">
+					<!--  <li class="nav-title">Menu</li>  -->
+					<li><a class="nav-link" href="index.htm"> <img src="img/home.svg" /></a></li>
+					<li><a class="nav-link" href="info.html"><img src="img/info.svg" /></a></li>
+					<li><a class="nav-link" href="weather.html"><img src="img/weather.svg" /></a></li>
+					<li><a class="nav-link" href="brightness.html"><img src="img/brightness.svg" /></a></li>
+					<li><a class="nav-link" href="edit"><img src="img/Edit.svg" /></a></li>
+					<li><a class="active" href="config.html"><img src="img/wifi.svg" /></a></li>
+					<li><a class="nav-link" href="firmware.html"><img src="img/upload.svg" /></a></li>
+					<div class="sidebar-separator"></div>
+					<li><a class="nav-link" href="javascript:restartcpu();"><img src="img/reboot.svg" /></a></li>
+				</ul>
+			</nav>
+		</aside>
+		<div class="menubutton">
+			<div class="bar"></div>
+			<div class="bar"></div>
+			<div class="bar"></div>
+		</div>
+	</div>
+	<main class="main" role="main">
+
+		<div class="containerinput">
+			<div style="text-align:left; display:inline-block; min-width:280px;">
+				<form method="post" action="SaveConfig">
+					<fieldset>
+						<legend>WiFi Connection settings</legend>
+						<span style="font-size: 80%;">Connected SSID : </span>
+						<div style="color: #3f3; font-size: 120%;" id="x_SSID"> </div>
+						<hr>
+						<!-- https://www.w3schools.com/html/html_form_input_types.asp  -->
+						<div>
+							<label for="x_WiFiSSID">WiFi ssid</label><br />
+							<input id="x_WiFiSSID" name="WiFiSSID" placeholder="Type your ssid">
+						</div>
+						<div>
+							<label>WiFi Password</label><br />
+							<input type="password" id="x_WiFiPASS" name="WiFiPASS" minlength="8" value="FakePassword"
+								autocomplete="current-password" required="">
+							<img src="img/hidden.png" style="margin-left: -10%;display:inline;
+											vertical-align: middle" id="togglePassword">
+						</div>
+					</fieldset>
+
+					<br />
+					<fieldset id="billing">
+						<legend>Network settings</legend>
+						<div>
+							<label for="billing-checkbox">Enable DHCP</label>
+							<input type="checkbox" onclick="toggle_dhcp()" id="x_DHCP" name="DHCP_FLAG" value="true">
+						</div>
+
+						<p></p>
+						<div>
+							<label>DNS name</label><br />
+							<input id="x_HostName" name="HostName" placeholder="hostname">
+						</div>
+						<div>
+							<label>IP Address</label><br />
+							<input type="text" pattern="[0-9-.]{7,15}" id="x_ip" name="IPaddress"
+								placeholder="IP address">
+						</div>
+						<div>
+							<label>Subnet Mask</label><br />
+							<input type="text" pattern="[0-9-.]{7,15}" id="x_netmask" name="SubMask"
+								placeholder="Subnet Mask">
+						</div>
+						<div>
+							<label>Gateway</label><br />
+							<input type="text" pattern="[0-9-.]{7,15}" id="x_gateway" name="GateWay"
+								placeholder="Gateway">
+						</div>
+						<div>
+							<label>DNS Server 1</label><br />
+							<input type="text" id="x_DNS_1" name="dns_1" placeholder="DNS 1">
+						</div>
+						<div>
+							<label>DNS Server 2</label><br />
+							<input type="text" id="x_DNS_2" name="dns_2" placeholder="DNS 2">
+						</div>
+					</fieldset>
+					<p></p>
+					<fieldset>
+						<legend>NTP settings</legend>
+
+						<label>Time Zone</label><br>
+						<select id="x_TimeZone" name="My_TZ">
+							<option value="CET-1CEST,M3.5.0,M10.5.0/3">Europe Amsterdam</option>
+							<option value="CET-1CEST,M3.5.0,M10.5.0/3">Europe Andorra</option>
+							<option value="EET-2EEST,M3.5.0/3,M10.5.0/4" selected="selected">Europe Αθήνα </option>
+							<option value="CET-1CEST,M3.5.0,M10.5.0/3">Europe Belgrade</option>
+							<option value="CET-1CEST,M3.5.0,M10.5.0/3">Europe Berlin</option>
+							<option value="CET-1CEST,M3.5.0,M10.5.0/3">Europe Bratislava</option>
+							<option value="CET-1CEST,M3.5.0,M10.5.0/3">Europe Brussels</option>
+							<option value="EET-2EEST,M3.5.0/3,M10.5.0/4">Europe Bucharest</option>
+							<option value="CET-1CEST,M3.5.0,M10.5.0/3">Europe Budapest</option>
+							<option value="CET-1CEST,M3.5.0,M10.5.0/3">Europe Busingen</option>
+							<option value="EET-2EEST,M3.5.0,M10.5.0/3">Europe Chisinau</option>
+							<option value="CET-1CEST,M3.5.0,M10.5.0/3">Europe Copenhagen</option>
+							<option value="IST-1GMT0,M10.5.0,M3.5.0/1">Europe Dublin</option>
+							<option value="CET-1CEST,M3.5.0,M10.5.0/3">Europe Gibraltar</option>
+							<option value="GMT0BST,M3.5.0/1,M10.5.0">Europe Guernsey</option>
+							<option value="EET-2EEST,M3.5.0/3,M10.5.0/4">Europe Helsinki</option>
+							<option value="GMT0BST,M3.5.0/1,M10.5.0">Europe Isle of Man</option>
+							<option value="GMT0BST,M3.5.0/1,M10.5.0">Europe Jersey</option>
+							<option value="EET-2">Europe Kaliningrad</option>
+							<option value="EET-2EEST,M3.5.0/3,M10.5.0/4">Europe Kiev</option>
+							<option value="WET0WEST,M3.5.0/1,M10.5.0">Europe Lisbon</option>
+							<option value="CET-1CEST,M3.5.0,M10.5.0/3">Europe Ljubljana</option>
+							<option value="GMT0BST,M3.5.0/1,M10.5.0">Europe London</option>
+							<option value="CET-1CEST,M3.5.0,M10.5.0/3">Europe Luxembourg</option>
+							<option value="CET-1CEST,M3.5.0,M10.5.0/3">Europe Madrid</option>
+							<option value="CET-1CEST,M3.5.0,M10.5.0/3">Europe Malta</option>
+							<option value="EET-2EEST,M3.5.0/3,M10.5.0/4">Europe Mariehamn</option>
+							<option value="CET-1CEST,M3.5.0,M10.5.0/3">Europe Monaco</option>
+							<option value="MSK-3">Europe Moscow</option>
+							<option value="CET-1CEST,M3.5.0,M10.5.0/3">Europe Oslo</option>
+							<option value="CET-1CEST,M3.5.0,M10.5.0/3">Europe Paris</option>
+							<option value="CET-1CEST,M3.5.0,M10.5.0/3">Europe Podgorica</option>
+							<option value="CET-1CEST,M3.5.0,M10.5.0/3">Europe Prague</option>
+							<option value="EET-2EEST,M3.5.0/3,M10.5.0/4">Europe Riga</option>
+							<option value="CET-1CEST,M3.5.0,M10.5.0/3">Europe Rome</option>
+							<option value="CET-1CEST,M3.5.0,M10.5.0/3">Europe San Marino</option>
+							<option value="CET-1CEST,M3.5.0,M10.5.0/3">Europe Sarajevo</option>
+							<option value="MSK-3">Europe Simferopol</option>
+							<option value="CET-1CEST,M3.5.0,M10.5.0/3">Europe Skopje</option>
+							<option value="EET-2EEST,M3.5.0/3,M10.5.0/4">Europe Sofia</option>
+							<option value="CET-1CEST,M3.5.0,M10.5.0/3">Europe Stockholm</option>
+							<option value="EET-2EEST,M3.5.0/3,M10.5.0/4">Europe Tallinn</option>
+							<option value="CET-1CEST,M3.5.0,M10.5.0/3">Europe Tirane</option>
+							<option value="EET-2EEST,M3.5.0/3,M10.5.0/4">Europe Uzhgorod</option>
+							<option value="CET-1CEST,M3.5.0,M10.5.0/3">Europe Vadu</option>
+							<option value="CET-1CEST,M3.5.0,M10.5.0/3">Europe Vatican</option>
+							<option value="CET-1CEST,M3.5.0,M10.5.0/3">Europe Vienna</option>
+							<option value="EET-2EEST,M3.5.0/3,M10.5.0/4">Europe Vilnius</option>
+							<option value="CET-1CEST,M3.5.0,M10.5.0/3">Europe Warsaw</option>
+							<option value="CET-1CEST,M3.5.0,M10.5.0/3">Europe Zagreb</option>
+							<option value="EET-2EEST,M3.5.0/3,M10.5.0/4">Europe Zaporozhye</option>
+							<option value="CET-1CEST,M3.5.0,M10.5.0/3">Europe Zurich</option>
+							<option value="<-12>12"> -12 (without DST tz)</option>
+							<option value="<-11>11"> -11 (without DST tz)</option>
+							<option value="<-10>10"> -10 (without DST tz)</option>
+							<option value="<-09>9"> -9 (without DST tz)</option>
+							<option value="<-08>8"> -8 (without DST tz)</option>
+							<option value="<-07>7"> -7 (without DST tz)</option>
+							<option value="<-06>6"> -6 (without DST tz)</option>
+							<option value="<-05>5"> -5 (without DST tz)</option>
+							<option value="<-04>4"> -4 (without DST tz)</option>
+							<option value="<-03>3"> -3 (without DST tz)</option>
+							<option value="<-02>2"> -2 (without DST tz)</option>
+							<option value="<-01>1"> -1 (without DST tz)</option>
+							<option value="GMT0">UTC 0 [Greenwich]</option>
+							<option value="<+01>-1"> +1 (without DST tz)</option>
+							<option value="<+02>-2"> +2 (without DST tz)</option>
+							<option value="<+03>-3"> +3 (without DST tz)</option>
+							<option value="<+04>-4"> +4 (without DST tz)</option>
+							<option value="<+05>-5"> +5 (without DST tz)</option>
+							<option value="<+06>-6"> +6 (without DST tz)</option>
+							<option value="<+07>-7"> +7 (without DST tz)</option>
+							<option value="<+08>-8"> +8 (without DST tz)</option>
+							<option value="<+09>-9"> +9 (without DST tz)</option>
+							<option value="<+10>-10"> +10 (without DST tz)</option>
+							<option value="<+11>-11"> +11 (without DST tz)</option>
+							<option value="<+12>-12"> +12 (without DST tz)</option>
+						</select>
+						<div>
+							<label>NTP Update, in minutes</label><br />
+							<input type="number" id="x_NTPsync" name="NTPsync" min="1" max="1440" step="1"
+								placeholder="111">
+						</div>
+						<div>
+							<label for="ntp_1">Time server 1</label><br />
+							<input list="ntp1-list" id="x_ntp_1" name="ntp_1" placeholder="Custom ntp">
+							<datalist id="ntp1-list">
+								<option value="10.10.19.5">Custom 1</option>
+								<option value="10.10.19.6">Custom 2</option>
+								<option value="gr.pool.ntp.org">Greece NTP time server</option>
+								<option value="pool.ntp.org">Global NTP time server</option>
+							</datalist>
+						</div>
+						<div>
+							<label for="ntp_2">Time server 2</label><br />
+							<input list="ntp2-list" id="x_ntp_2" name="ntp_2" placeholder="Custom ntp">
+							<datalist id="ntp2-list">
+								<option value="10.10.19.5">Custom 1</option>
+								<option value="10.10.19.6">Custom 2</option>
+								<option value="gr.pool.ntp.org">Greece NTP time server</option>
+								<option value="pool.ntp.org">Global NTP time server</option>
+							</datalist>
+						</div>
+					</fieldset>
+					<div>
+						<button class="btn save" type="submit">Save</button>
+						<div type="button" class="btn" onclick="LoadDefault()">Load Default</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</main>
+	<script>
+		// === Menu ===
+		var container = document.querySelector(".container");
+		var main = document.querySelector(".main");
+		document.querySelector(".menubutton").addEventListener("click", toggleSidebar, false);
+
+		container.addEventListener("click", function (e) {
+			if (isShowingSidebar() && main.contains(e.target)) {
+				e.preventDefault();
+				hideSidebar();
+			}
+		}, true);
+
+		// === Start ===
+		function Start() {
+			start ? sendRequest("Read_ESPsettings", ReadConfig) :
+				document.getElementById('x_SSID').innerHTML = "<span style='color:#d00; font-size:1.2rem;'>OFF Line</span>";
+		}
+
+		function toggle_dhcp() {
+			document.getElementById('x_ip').disabled = document.getElementById('x_DHCP').checked;
+			document.getElementById('x_netmask').disabled = document.getElementById('x_DHCP').checked;
+			document.getElementById('x_gateway').disabled = document.getElementById('x_DHCP').checked;
+			document.getElementById('x_DNS_1').disabled = document.getElementById('x_DHCP').checked;
+			document.getElementById('x_DNS_2').disabled = document.getElementById('x_DHCP').checked;
+		}
+
+		// -- GET Config -- 
+		function ReadConfig(msg) {
+			var obj = JSON.parse(msg);
+			document.getElementById("x_SSID").innerHTML = obj.JS_SSID;
+			document.getElementById("x_WiFiSSID").value = obj.WiFiSSID;
+			document.getElementById("x_WiFiPASS").value = obj.WiFiPASS;
+			document.getElementById("x_DHCP").checked = obj.DHCP_FLAG;
+			document.getElementById("x_HostName").value = obj.HostName;
+			document.getElementById("x_ip").value = obj.IPaddress;
+			document.getElementById("x_netmask").value = obj.SubMask;
+			document.getElementById("x_gateway").value = obj.GateWay;
+			document.getElementById("x_DNS_1").value = obj.dns_1;
+			document.getElementById("x_DNS_2").value = obj.dns_2;
+			document.getElementById("x_TimeZone").value = obj.My_TZ;
+			document.getElementById("x_NTPsync").value = obj.NTPsync;
+			document.getElementById("x_ntp_1").value = obj.ntp_1;
+			document.getElementById("x_ntp_2").value = obj.ntp_2;
+			toggle_dhcp();
+		}
+
+		// -- Load Default settings -- 
+		function LoadDefault() {
+			if (confirm("Καταλαβαίνεις τι κάνεις έτσι?\nΚάνε τις αλλαγές σου και σώσε.\nΜετά  κάνε και μια επανεκκίνηση.")) {
+				sendRequest("LoadDefault_cfg", ReadConfig);
+			}
+		}
+
+		// toggle visibility Password
+		const togglePassword = document.querySelector('#togglePassword');
+		const password = document.querySelector('#x_WiFiPASS');
+		togglePassword.addEventListener('click', function (e) {
+			// Toggle the type attribute
+			const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+			password.setAttribute('type', type);
+			// Toggle the eye slash icon
+			if (togglePassword.src.match("img/hidden.png")) {
+				togglePassword.src = "img/visibility.png";
+			} else {
+				togglePassword.src = "img/hidden.png";
+			}
+		});
+
+	</script>
+</body>
+
+</html>

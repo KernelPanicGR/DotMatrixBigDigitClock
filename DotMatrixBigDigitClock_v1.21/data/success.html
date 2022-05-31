@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="el-GR">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="Dot Matrix Web Clock">
+	<meta name="author" content="Kernel Panic">
+	<title>Επιτυχίες και μόνο</title>
+	<link href="favicon.ico" rel="icon" type="image/x-icon">
+	<!-- Emoji Unicode Reference: https://www.w3schools.com/charsets/ref_emoji.asp 	-->
+	<style>
+		@font-face {
+			font-family: 'Play';
+			font-style: normal;
+			font-weight: 400;
+			src: url('fonts/play.woff2') format('woff2');
+		}
+
+		body {
+			background-color: rgb(48, 48, 48);
+			font-family: "Play", system-ui, sans-serif;
+			text-align: center;
+			color: #f8f8f8;
+			padding-top: 50px;
+			background-image: url("img/My_Logo.png");
+			background-repeat: no-repeat;
+			background-position: 1% 98%;
+			background-attachment: fixed;
+		}
+
+		div {
+			border: 1px solid;
+			padding: 5px;
+			width: 410px;
+			padding-bottom: 10px;
+			margin: auto;
+		}
+
+		.text {
+			font-size: 30px;
+			color: #48fc11;
+		}
+
+		#timer {
+			font-size: 6rem;
+			color: #eeb808;
+		}
+
+		.btn {
+			background-image: linear-gradient(#bf0f2a, #5f0a0a);
+			font-size: 18px;
+			color: #d5d5d5;
+			cursor: pointer;
+			padding: 10px 22px 12px;
+		}
+
+		.btn:hover {
+			background-image: linear-gradient(#8f0c0c, #e4092a);
+			text-shadow: 0 3px 4px #1f0201;
+		}
+	</style>
+</head>
+
+<body>
+	<span class="text">&#128515; Θρίαμβος! </span>
+	<div>
+		Οι επιλογές σου αποθηκεύτηκαν στην μνήμη. <br>
+		Για να ισχύσουν, πρέπει να γίνει επανεκκίνηση. <br>
+		Αν μετά την λήξη της αντίστροφης μέτρησης,<br>
+		ο περιηγητής αποτύχει να εμφανίσει την αρχική σελίδα,<br>
+		θα πρέπει να δεις τις ρυθμίσεις του, ας πούμε: IP, port.<br>
+	</div>
+	<span id="timer"></span>
+	<p>
+		<input type="button" class="btn" id="hiddbtn" value="Eπανεκκίνηση" onclick="Reboot()" />
+	</p>
+	<script>
+		var sec = 30;
+		function Reboot() {
+			document.getElementById("hiddbtn").style.visibility = "hidden";
+			const xhttp = new XMLHttpRequest();
+			xhttp.open("GET", "restart", true);
+			xhttp.send();
+			const myInterval = setInterval(myTimer, 1000);
+
+			function myTimer() {
+				sec--;
+				document.getElementById("timer").innerHTML = sec;
+				if (sec < 1) {
+					clearInterval(myInterval);
+					window.location.assign("index.htm");
+				}
+			}
+		}		
+	</script>
+</body>
+
+</html>

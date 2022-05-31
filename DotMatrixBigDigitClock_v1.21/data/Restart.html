@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="el-GR">
+
+<head>
+	<title>Restart ESP</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="author" content="Kernel Panic">
+	<style>
+		@font-face {
+			font-family: 'Play';
+			font-style: normal;
+			font-weight: 400;
+			src: local(''),
+				url('fonts/play.woff2') format('woff2'),
+		}
+
+		body {
+			background-color: rgb(10, 10, 10);
+			font-family: "Play", system-ui, sans-serif;
+			text-align: center;
+			margin: auto;
+			padding: 40px;
+			background-image: url("img/My_Logo.png");
+			background-repeat: no-repeat;
+			background-position: 1% 98%;
+			background-attachment: fixed;
+		}
+
+		.text-1 {
+			font-size: 5vw;
+			color: rgb(211, 205, 203);
+		}
+
+		.text-2 {
+			font-size: 4em;
+			animation: animtext 1000ms infinite linear;
+		}
+
+		@keyframes animtext {
+			from {
+				color: rgb(255, 45, 8);
+			}
+
+			to {
+				opacity: 0.15;
+			}
+		}
+	</style>
+</head>
+
+<body onload="Reboot()">
+	<div class="text-1">
+		Επανεκκίνηση ε? <br>
+		...περίμενε τώρα! <br>
+		<div> <span class="text-2" id="timer"></span> </div>
+	</div>
+	<script>
+		var sec = 25;
+
+		function Reboot() {
+			const xhttp = new XMLHttpRequest();
+			xhttp.open("GET", "restart", true);
+			xhttp.send();
+			const myInterval = setInterval(myTimer, 1000);
+
+			function myTimer() {
+				sec--;
+				document.getElementById("timer").innerHTML = sec;
+				if (sec < 1) {
+					clearInterval(myInterval);
+					window.location.assign("index.htm");
+				}
+			}
+		}
+	</script>
+</body>
+
+</html>

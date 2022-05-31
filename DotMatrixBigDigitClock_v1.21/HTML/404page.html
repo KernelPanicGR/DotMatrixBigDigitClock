@@ -1,0 +1,336 @@
+<!-- // HTML Minifier (v4.0.0) -> https://kangax.github.io/html-minifier/ -->
+<!doctype html>
+<html lang=el-GR>
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+	<title>404 page</title>
+	<link href=favicon.ico rel=icon type=image/x-icon>
+	<style></style>
+</head>
+
+<style>
+	/* 404 page  
+	   @import url('https://fonts.googleapis.com/css2?family=Play&display=swap');
+    */
+	body {
+		width: 100%;
+		/*	height: 100vw; */
+		background: orange;
+		white-space: nowrap;
+		font-family: 'Play', system-ui, sans-serif;
+		margin: 0;
+	}
+
+	#title {
+		text-align: center;
+		font-size: 7.8vmin;
+		position: relative;
+		color: #fff;
+	}
+
+	.txt {
+		letter-spacing: 1.5px;
+		font-size: 27%;
+		color: #ad5d02;
+	}
+
+	.circles:after {
+		content: '';
+		display: inline-block;
+		width: 100%;
+		height: 100px;
+		background: rgb(250, 184, 62);
+		position: absolute;
+		top: -50px;
+		left: 0;
+		transform: skewY(-3deg);
+		-webkit-transform: skewY(-3deg);
+	}
+
+	.circles {
+		background: #fff8e4;
+		text-align: center;
+		position: relative;
+		margin-top: -60px;
+		box-shadow: inset -1px -6px 10px rgba(121, 121, 121, 0.4);
+	}
+
+	.circles p {
+		font-size: 180px;
+		color: #fff;
+		padding-top: 90px;
+		position: relative;
+		z-index: 9;
+		line-height: 99%;
+	}
+
+	.circles p small {
+		font-size: 40px;
+		line-height: 99%;
+		vertical-align: top;
+	}
+
+	.circles .circle.small {
+		width: 140px;
+		height: 140px;
+		border-radius: 50%;
+		background: rgba(230, 130, 0, .555);
+		position: absolute;
+		z-index: 1;
+		top: 80px;
+		left: 50%;
+		animation: 7s smallmove infinite cubic-bezier(1, .22, .71, .98);
+		-webkit-animation: 7s smallmove infinite cubic-bezier(1, .22, .71, .98);
+		animation-delay: 1.2s;
+		-webkit-animation-delay: 1.2s;
+	}
+
+	.circles .circle.med {
+		width: 150px;
+		height: 150px;
+		border-radius: 50%;
+		background: rgba(230, 130, 0, .61);
+		position: absolute;
+		z-index: 1;
+		top: 0;
+		left: 10%;
+		animation: 7s medmove infinite cubic-bezier(.32, .04, .15, .75);
+		-webkit-animation: 7s medmove infinite cubic-bezier(.32, .04, .15, .75);
+		animation-delay: 0.4s;
+		-webkit-animation-delay: 0.4s;
+	}
+
+	.circles .circle.big {
+		width: 300px;
+		height: 300px;
+		border-radius: 50%;
+		background: rgba(230, 130, 0, .815);
+		position: absolute;
+		z-index: 1;
+		top: 100px;
+		right: 0;
+		animation: 8s bigmove infinite;
+		-webkit-animation: 8s bigmove infinite;
+		animation-delay: 3s;
+		-webkit-animation-delay: 1s;
+	}
+
+	@-webkit-keyframes smallmove {
+		0% {
+			top: 10px;
+			left: 45%;
+			opacity: 1;
+		}
+
+		25% {
+			top: 280px;
+			left: 40%;
+			opacity: 0.7;
+		}
+
+		50% {
+			top: 240px;
+			left: 55%;
+			opacity: 0.4;
+		}
+
+		75% {
+			top: 100px;
+			left: 40%;
+			opacity: 0.6;
+		}
+
+		100% {
+			top: 10px;
+			left: 45%;
+			opacity: 1;
+		}
+	}
+
+	@keyframes smallmove {
+		0% {
+			top: 10px;
+			left: 45%;
+			opacity: 1;
+		}
+
+		25% {
+			top: 280px;
+			left: 40%;
+			opacity: 0.7;
+		}
+
+		50% {
+			top: 240px;
+			left: 55%;
+			opacity: 0.4;
+		}
+
+		75% {
+			top: 100px;
+			left: 40%;
+			opacity: 0.6;
+		}
+
+		100% {
+			top: 10px;
+			left: 45%;
+			opacity: 1;
+		}
+	}
+
+	@-webkit-keyframes medmove {
+		0% {
+			top: 0px;
+			left: 20%;
+			opacity: 1;
+		}
+
+		25% {
+			top: 280px;
+			left: 80%;
+			opacity: 0.7;
+		}
+
+		50% {
+			top: 240px;
+			left: 55%;
+			opacity: 0.4;
+		}
+
+		75% {
+			top: 100px;
+			left: 40%;
+			opacity: 0.6;
+		}
+
+		100% {
+			top: 0px;
+			left: 20%;
+			opacity: 1;
+		}
+	}
+
+	@keyframes medmove {
+		0% {
+			top: 0px;
+			left: 20%;
+			opacity: 1;
+		}
+
+		25% {
+			top: 280px;
+			left: 80%;
+			opacity: 0.7;
+		}
+
+		50% {
+			top: 240px;
+			left: 55%;
+			opacity: 0.4;
+		}
+
+		75% {
+			top: 100px;
+			left: 40%;
+			opacity: 0.6;
+		}
+
+		100% {
+			top: 0px;
+			left: 20%;
+			opacity: 1;
+		}
+	}
+
+	@-webkit-keyframes bigmove {
+		0% {
+			top: 0px;
+			right: 4%;
+			opacity: 0.5;
+		}
+
+		25% {
+			top: 100px;
+			right: 40%;
+			opacity: 0.4;
+		}
+
+		50% {
+			top: 240px;
+			right: 45%;
+			opacity: 0.8;
+		}
+
+		75% {
+			top: 100px;
+			right: 35%;
+			opacity: 0.6;
+		}
+
+		100% {
+			top: 0px;
+			right: 4%;
+			opacity: 0.5;
+		}
+	}
+
+	@keyframes bigmove {
+		0% {
+			top: 0px;
+			right: 4%;
+			opacity: 0.5;
+		}
+
+		25% {
+			top: 100px;
+			right: 40%;
+			opacity: 0.4;
+		}
+
+		50% {
+			top: 240px;
+			right: 45%;
+			opacity: 0.8;
+		}
+
+		75% {
+			top: 100px;
+			right: 35%;
+			opacity: 0.6;
+		}
+
+		100% {
+			top: 0px;
+			right: 4%;
+			opacity: 0.5;
+		}
+	}
+</style>
+
+<body>
+	<section id="not-found">
+		<a href=index.htm><img src=img/home.svg> </a>
+		<div id="title">
+			<span> Error 404 : Page Not Found</span> <br />
+			<span class=txt> Χαμένη Σελίδα &nbsp;&nbsp;&nbsp;&nbsp;</span>
+			<span class=txt> χαμένα σχέδια &nbsp;&nbsp;&nbsp;&nbsp;</span>
+			<span class=txt> χαμένα όνειρα &nbsp;&nbsp;&nbsp;&nbsp;</span>
+			<span class=txt> χαμένες ελπίδες</span>
+			<br />
+		</div>
+
+		<div class="circles">
+			<p>404<br>
+				<small>Tη χάσαμε αδέρφι...</small>
+			</p>
+			<span class="circle big"></span>
+			<span class="circle med"></span>
+			<span class="circle small"></span>
+		</div>
+	</section>
+</body>
+
+</html>
