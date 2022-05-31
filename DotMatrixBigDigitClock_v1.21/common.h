@@ -8,9 +8,9 @@
 
 //----- ESP Wi-Fi networks Settings ------------------------------------------
 #ifdef  OFFICE  // OFFICE WiFi Config
-#define MY_SSID         "-*****-"                    // Set these to your WiFi desired credentials.
-#define MY_PASS         "-*******-"                  // Set these to your WiFi desired credentials.
-#define USE_DHCP         false                       // false = Static IP, true = DHCP (Dynamic Host Configuration Protocol)
+#define MY_SSID         "your-ssid"                 // Set these to your WiFi desired credentials.
+#define MY_PASS         "your-password"             // Set these to your WiFi desired credentials.
+#define USE_DHCP         false                      // false = Static IP, true = DHCP (Dynamic Host Configuration Protocol)
 #define STATIC_IP       IPAddress(192, 168, 0, 84)
 #define GATEWAY_IP      IPAddress(192, 168, 0, 1)
 #define NETMASK_IP      IPAddress(255, 255, 255, 0)
@@ -28,7 +28,7 @@
 #define NETMASK_IP      IPAddress(255, 255, 255, 0)
 #define DNS1_IP         IPAddress(192, 168, 1, 1)
 #define DNS2_IP         IPAddress(8, 8, 8, 8)       // Google DNS Server IP
-#define HTTP_PORT       8084                        // port for webserver
+#define HTTP_PORT       80                          // port for webserver
 #define NTP_SERVER_1    "gr.pool.ntp.org"           // Greece NTP time server
 #define NTP_SERVER_2    "pool.ntp.org"              // Global NTP time server
 #endif  // OFFICE
